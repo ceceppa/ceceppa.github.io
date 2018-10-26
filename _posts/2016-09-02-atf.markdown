@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 'Alex The Frog'
-date: 2018-10-27 11:00:00 +0100
-categories: jekyll update
+date: 2016-09-02 10:00:00 +0100
+categories: unity game
 ---
 
 Frogger inspired game, build using Unity 3d [deom](https://ceceppa.github.io/atf/index.html)
