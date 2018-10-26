@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Demystify SSH</title>
+
+		<meta name="description" content="A simplified overview of how it works and how to set it up, how we can benefit from using SSH and some WordPress tool that use it.">
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+
+
+	</head>
+	<body class="reveal-viewport theme-font-montserrat theme-color-black-orange">
+		<div class="reveal">
+			<div class="slides">
+				<section data-id="a944f7bb5f43264b072cbed0d6e91c86"><div class="sl-block" data-block-type="text" style="width: 1076px; left: 102px; top: 194px; height: auto;" data-block-id="db16b97bc648f42f2f17292bb27df35b"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11; font-size: 120%;">
+<h1>Demystify SSH</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 1076px; left: 102px; top: 323px; height: auto;" data-block-id="a286d5d98782485bb0a0889630175e42"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12; color: rgb(204, 204, 204);" data-gramm_id="2caedb8d-1c53-f7ed-1efa-fcde368db320" data-gramm="true" data-gramm_editor="true">
+<h2>Alessandro Senese</h2>
+</div></div></section><section data-id="1f530012545701cfb0a9bca5be53f969"><div class="sl-block" data-block-type="image" data-block-id="f6079bf3cc0ab0334e1214b235fea748" style="min-width: 4px; min-height: 4px; width: 280px; height: 280px; left: 500px; top: 76px;">
+    <div class="sl-block-content" style="z-index: 11;">
+        <img style="" data-natural-width="539" data-natural-height="539" data-lazy-loaded="" data-src="demystify-ssh/9cbd49e346f17d1a1207f5b2b692826e.png">
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="3d8b22d540bc29792942926744959543" style="height: auto; min-width: 30px; min-height: 30px; width: 246px; left: 476px; top: 444px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="a79d7416-2232-3087-2b60-5017a8a45674" data-gramm="true" data-gramm_editor="true">
+        <p>Lead Developer</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 220px; left: 476px; top: 525px;" data-block-id="8d70226a83b97b5f31fc2fb1191b3a46">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="a79d7416-2232-3087-2b60-5017a8a45674" data-gramm="true" data-gramm_editor="true">
+        <p>@ceceppa</p>
+    </div>
+</div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 400px; left: 476px; top: 599px;" data-block-id="0478d8d5acf3e4a57312a58462ff1f5e">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="a79d7416-2232-3087-2b60-5017a8a45674" data-gramm="true" data-gramm_editor="true">
+<p>https://github.com/ceceppa</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 40px; height: 40px; left: 416px; top: 599px;" data-block-id="d65bc0ed85f49287d3ddbb1dee648832">
+    <div class="sl-block-content" style="z-index: 15;" data-inline-svg="true">
+        <img style="" data-natural-width="35" data-natural-height="35" data-lazy-loaded="" data-src="demystify-ssh/4de0af6bb57b4639e47fe006d57a7bf1.svg">
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35.318" height="35.318" viewbox="0 0 35.318 35.318" style="enable-background:new 0 0 35.318 35.318;" xml:space="preserve" preserveaspectratio="xMidYMid meet">
+            <g fill="#fff">
+                <path d="M23.71,34.689c-0.172,0.062-0.345,0.137-0.522,0.168c-0.678,0.121-1.112-0.229-1.116-0.922 c-0.009-1.287-0.009-2.572,0.012-3.859c0.022-1.48-0.012-2.941-1.139-4.162c0.67-0.12,1.266-0.204,1.849-0.338 c3.862-0.887,5.868-3.323,6.124-7.366c0.131-2.058-0.236-3.946-1.604-5.567c-0.099-0.114-0.104-0.373-0.057-0.539 c0.364-1.34,0.258-2.649-0.166-3.959c-0.105-0.327-0.279-0.428-0.602-0.407c-1.134,0.063-2.173,0.461-3.089,1.073 c-0.883,0.593-1.705,0.722-2.754,0.482c-2.31-0.521-4.635-0.369-6.94,0.165c-0.261,0.062-0.612-0.021-0.851-0.161 c-1.082-0.634-2.164-1.25-3.412-1.496c-0.965-0.188-1.049-0.14-1.305,0.793C7.816,9.77,7.784,10.947,8.113,12.13 c0.047,0.172-0.002,0.448-0.117,0.575c-2.557,2.853-1.631,8.244,0.092,10.309c1.34,1.604,3.12,2.326,5.096,2.701 c0.345,0.064,0.688,0.113,1.033,0.173c-0.296,0.77-0.562,1.497-0.863,2.212c-0.059,0.138-0.246,0.254-0.399,0.312 c-1.938,0.752-3.604,0.199-4.713-1.56c-0.593-0.938-1.354-1.639-2.488-1.842c-0.036-0.007-0.073-0.026-0.106-0.021 c-0.305,0.08-0.607,0.164-0.911,0.246c0.171,0.238,0.292,0.558,0.521,0.701c0.961,0.608,1.586,1.475,1.999,2.498 c0.649,1.604,1.909,2.319,3.546,2.459c0.799,0.065,1.606,0.01,2.481,0.01c0,0.996,0.036,2.133-0.015,3.265 c-0.026,0.61-0.639,0.854-1.373,0.604c-1.947-0.666-3.752-1.621-5.311-2.963C0.956,26.96-1.214,20.83,0.657,13.655 C2.522,6.503,7.383,2.116,14.651,0.739C24.708-1.163,34.235,6.161,35.233,16.37C36.021,24.418,31.284,31.949,23.71,34.689z M14.229,25.85c-0.006,0.014-0.01,0.024-0.016,0.038c0.018,0.003,0.036,0.006,0.055,0.009 C14.282,25.898,14.294,25.923,14.229,25.85z M9.679,29.031c0.157,0.097,0.307,0.22,0.477,0.273c0.062,0.02,0.177-0.121,0.38-0.271 c-0.282-0.107-0.448-0.201-0.623-0.225C9.845,28.8,9.757,28.953,9.679,29.031z M11.112,29.277c0.023,0.105,0.232,0.236,0.355,0.234 c0.119-0.002,0.235-0.16,0.354-0.25c-0.108-0.099-0.216-0.195-0.548-0.494C11.201,28.975,11.082,29.143,11.112,29.277z M12.87,28.854c-0.148,0.035-0.273,0.172-0.408,0.266c0.079,0.1,0.158,0.193,0.285,0.35c0.175-0.16,0.294-0.271,0.414-0.379 C13.061,29.004,12.944,28.836,12.87,28.854z M8.512,28.261c0.082,0.155,0.209,0.289,0.381,0.508 c0.115-0.188,0.24-0.332,0.218-0.361c-0.109-0.143-0.257-0.26-0.403-0.367C8.698,28.033,8.495,28.227,8.512,28.261z"></path>
+            </g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+            <g></g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 35px; height: 35px; left: 419px; top: 527px;" data-block-id="22d9d8f2bbfd03eaaaacd2d8aec5b743"><div class="sl-block-content" style="z-index: 16;"><img style="" data-natural-width="410" data-natural-height="410" data-lazy-loaded="" data-src="demystify-ssh/dc7a73d16b554c66e9d63882485be989.svg"></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 64px; height: 64px; left: 404px; top: 432px;" data-block-id="b1fed615fe637770c16056ad1ad27690"><div class="sl-block-content" style="z-index: 17;"><img style="" data-natural-width="64" data-natural-height="64" data-lazy-loaded="" data-src="demystify-ssh/8b2ebe6f100441b9e4ff87db03d51fda.png"></div></div></section><section class="stack" data-id="cd765be7224fca61256ee28ef623ac1a"><section data-id="03ac1516559f1b242f6e6b37173a4828"><div class="sl-block" data-block-type="text" style="width: 806px; left: 237px; top: 47px; height: auto;" data-block-id="fd882e2bec8448cc99ba74c5e38d52c8">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11;" data-gramm_id="bdb543d9-0f11-3a22-d633-5ad45af7bb13" data-gramm="true" data-gramm_editor="true">
+        <h1>What is SSH?</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="3c4908f3591158ff5696299ce7dd573a" style="height: auto; min-width: 30px; min-height: 30px; width: 803px; left: 240px; top: 288px;">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="b8b50b9c-b4b5-593b-9502-3cf5c2ae6804" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+        <p style="text-align:left">
+            <span>
+                <em>“Secure Socket Shell, is a 
+                    
+                   network protocol that provides administrators with a 
+                    
+                    <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">secure way</strong> to access a 
+                    
+                    <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">remote computer.</strong>” 
+                
+                </em>
+            </span>
+        </p>
+        <p style="text-align:left"> </p>
+        <p style="text-align:left">
+            <span>
+                <em>-- Wikipedia</em>
+            </span>
+        </p>
+        <p> </p>
+    </div>
+</div></section><section data-id="04e689b158a2b196be4ac7e2b79bc674">
+
+
+
+
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 960px; height: 720px; left: 160px; top: 0px;" data-block-id="764f154bbfca34ecc4ef0ffa552a5b90"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="728" data-natural-height="546" data-lazy-loaded="" data-src="demystify-ssh/78b01d0f336535f28c575db1888c0f63.jpg"></div></div>
+
+</section></section><section class="stack" data-id="e26f6ad09161c982bc88d459a96a7927"><section data-id="8a019b1c8f550655f420be01211a64a5"><div class="sl-block" data-block-type="text" data-block-id="922fa6b80ed4599fd6ddd083271c37b6" style="height: auto; min-width: 30px; min-height: 30px; width: 880px; left: 200px; top: 0px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 75%;" data-gramm_id="524c271c-cfad-1e00-c6ed-749dfeb058a8" data-gramm="true" data-gramm_editor="true">
+        <h1>Encryption ​Algorithm</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="37e2660bd93a376b5da8a1c92031eb56" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 340px; top: 144px;">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;" data-gramm_id="d703a25a-c4f7-b945-f8b7-fc821929469d" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+        <h2>Symmetric</h2>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="09c2975c265620aa94c0d627e330b5c4" style="height: auto; min-width: 30px; min-height: 30px; width: 780px; left: 80px; top: 321px;">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+        <ul>
+            <li>Use the 
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">same key</strong> to encrypt and decrypt data
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 800px; left: 80px; top: 393px;" data-block-id="85c9d432a44cefb424dccbfffe2a88e7">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left; color: rgb(255, 255, 255);" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="2">
+<ul>
+	<li>A=1, B=2, D=3, etc</li>
+</ul>
+</div>
+</div>
+
+
+</section><section data-id="bab9514fc709517b8a8705b317ff9fd9"><div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 320px; left: 80px; top: 609px;" data-block-id="cbf3cc995c91617d752d95f0a0e2984e">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="5">
+        <ul>
+            <li>Fast</li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 380px; left: 800px; top: 609px;" data-block-id="bcafe238525dd76540a91f80df29a599">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="6">
+        <ul>
+            <li>Sharing the Key</li>
+        </ul>
+    </div>
+</div>
+
+<div class="sl-block" data-block-type="image" data-block-id="78b2b656e97e9c534c3eb3d3a9428fa4" style="min-width: 4px; min-height: 4px; width: 125px; height: 160px; left: 98px; top: 272px;"><div class="sl-block-content" style="z-index: 13;"><img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg"></div></div>
+<div class="sl-block" data-block-type="line" data-block-id="6fbc5127442faefa0b6399407b2a74d2" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 240px; top: 352px;"><div class="sl-block-content fragment fade-right" data-line-x1="0" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 14;" data-line-width="4px" data-fragment-index="0"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="80" height="1" viewbox="0 200 80 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="93596b9549133f07a3c6236963e56b12" style="min-width: 4px; min-height: 4px; width: 50px; height: 50px; left: 336px; top: 327px;"><div class="sl-block-content fragment" style="z-index: 15;" data-fragment-index="0"><img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg"></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 400px; top: 352px;" data-block-id="cba716c23ce1e473abcb4f57230bb7a1"><div class="sl-block-content fragment fade-right" data-line-x1="0" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 16;" data-line-width="4px" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="80" height="1" viewbox="0 200 80 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" data-block-id="8db7da71e4553faa059bf7dbf33a496f" style="min-width: 4px; min-height: 4px; width: 269px; height: 202px; left: 506px; top: 280px;"><div class="sl-block-content fragment" style="z-index: 17;" data-fragment-index="1"><img data-natural-width="280" data-natural-height="210" style="" data-lazy-loaded="" data-src="demystify-ssh/2e849f8fba6e560351b7c7de50b7ea3f.svg"></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 800px; top: 352px;" data-block-id="d8bb2f32ec2e19b76e5de50e8d636679"><div class="sl-block-content fragment fade-right" data-line-x1="0" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 18;" data-line-width="4px" data-fragment-index="2"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="80" height="1" viewbox="0 200 80 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 50px; height: 50px; left: 896px; top: 327px;" data-block-id="da3982c89f1b71b832cdf74f9d61c9fa"><div class="sl-block-content fragment" style="z-index: 19;" data-fragment-index="2"><img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg"></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 960px; top: 352px;" data-block-id="26f015f4858680f554a874ba768ff455"><div class="sl-block-content fragment fade-right" data-line-x1="0" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 20;" data-line-width="4px" data-fragment-index="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="80" height="1" viewbox="0 200 80 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 125px; height: 160px; left: 1058px; top: 272px;" data-block-id="fec40dbc9158a8a286aa55cd2fb8a137"><div class="sl-block-content fragment" style="z-index: 21;" data-fragment-index="3"><img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 340px; top: 0px;" data-block-id="c278659630c08eae5a31f042582cdbf2">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 22;" data-gramm_id="d703a25a-c4f7-b945-f8b7-fc821929469d" data-gramm="true" data-gramm_editor="true">
+        <h2>Symmetric</h2>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 361px; top: 196px;" data-block-id="7036fc62e4d5310dfa600f9e6eb594d0"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="151" data-line-x2="0" data-line-y2="255" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 23;" data-line-width="4px" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="104" viewbox="0 151 1 104"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="151" x2="0" y2="249"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="151" x2="0" y2="249"></line><polygon fill="#ffffff" transform="translate(0,249) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" data-block-id="e5ecf9d73f0fd852ad28556108ed5b6c" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 361px; top: 196px;"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="167" data-line-x2="560" data-line-y2="167" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="none" style="z-index: 24;" data-line-width="4px" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="560" height="1" viewbox="0 167 560 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="167" x2="560" y2="167"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="167" x2="560" y2="167"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 921px; top: 196px;" data-block-id="5be4e493daec2a7f847c4350affbb3f7"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="151" data-line-x2="0" data-line-y2="255" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 25;" data-line-width="4px" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="104" viewbox="0 151 1 104"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="151" x2="0" y2="249"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="151" x2="0" y2="249"></line><polygon fill="#ffffff" transform="translate(0,249) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="9353c9d5080d03a0d75538f73d9c8ed2" style="min-width: 4px; min-height: 4px; width: 191px; height: 44px; left: 544px; top: 174px;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(204, 204, 204)" data-shape-stretch="true" style="z-index: 26;" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 191 44"><rect width="191" height="44" class="shape-element" fill="rgb(204, 204, 204)"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="30d86dddb6df9926ed1ed5a689b1385f" style="height: auto; min-width: 30px; min-height: 30px; width: 237px; left: 521px; top: 177px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 27; color: rgb(34, 34, 34);" data-gramm_id="c05c55d9-15e7-626b-dc6c-36a27526de95" data-gramm="true" data-gramm_editor="true" data-fragment-index="4">
+<p><strong>same key</strong></p>
+</div></div></section></section><section class="stack" data-id="e6e5c39adde90451bc69cf15a6a3d052"><section data-id="349f484a98ac513cbf72019a36112639"><div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 200px; top: 0px;" data-block-id="905b0f7664fbafc37ff33ff623aad915">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; font-size: 75%;" data-gramm_id="524c271c-cfad-1e00-c6ed-749dfeb058a8" data-gramm="true" data-gramm_editor="true">
+        <h1>Encryption ​Algorithm</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 340px; top: 142px;" data-block-id="ba7e1aed0b88f76b39edf73bc603175c">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" data-gramm_id="d703a25a-c4f7-b945-f8b7-fc821929469d" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+        <h2>Asymmetric</h2>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 80px; top: 321px;" data-block-id="5c485cabdc17c406ec2c0a8564e2f47a">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+        <ul>
+            <li>
+                <span>
+                    <span style="color:rgb(255, 255, 255)">Uses 
+                        <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">different keys</strong> to encrypt and decrypt data
+                    </span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
+</section><section data-id="f62481a45db728510f3906913c99f4d4"><div class="sl-block" data-block-type="text" style="height: auto; width: 161px; left: 960px; top: 537px;" data-block-id="d0384f156926c0a5e6554993bf0c5015">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="3">
+<ul>
+	<li>Slow</li>
+</ul>
+</div>
+</div>
+
+<div class="sl-block" data-block-type="image" style="width: 125px; height: 160px; left: 98px; top: 274px; min-width: 4px; min-height: 4px;" data-block-id="e3988f044ac0832aa0ab52570739a409">
+    <div class="sl-block-content" style="z-index: 11;">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 240px; top: 354px;" data-block-id="9e45ba6017d010e5b4a4b14da07978c4">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 12;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="-40 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 376px; top: 329px; min-width: 4px; min-height: 4px;" data-block-id="0ca194d1f2f56fb2ab88409696e57b83">
+    <div class="sl-block-content" style="z-index: 13;">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 440px; top: 354px;" data-block-id="c71ab5292bca7ab586c0459c5684721f">
+    <div class="sl-block-content" data-line-x1="0" data-line-y1="200" data-line-x2="120" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 14;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="0 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="114" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="114" y2="200"></line><polygon fill="#ffffff" transform="translate(114,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 720px; top: 354px;" data-block-id="e416becb4884aebf8dcf834d97c9924c">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 15;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="-40 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 856px; top: 329px; min-width: 4px; min-height: 4px;" data-block-id="44632db0111fccb7a5fdc07b4dce84a4">
+    <div class="sl-block-content" style="z-index: 16;" data-inline-svg="true">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50.098" height="50.086" viewbox="0 0 13.255 13.252" preserveaspectratio="xMidYMid meet">
+            <g transform="translate(-70.84 -157.153)" fill="#8dd792" stroke="#fff" stroke-width=".026">
+                <circle r=".827" cy="160.784" cx="80.258"></circle>
+                <path d="M83.94 161.452c-.276-.702-.782-1.716-1.626-2.556-.84-.837-1.844-1.328-2.537-1.593a2.077 2.077 0 0 0-2.204.467l-2.03 2.02a2.068 2.068 0 0 0-.43 2.292c.106.24.222.474.345.7l-4.453 4.454a.517.517 0 0 0-.152.366v2.273c0 .286.232.517.517.517h2.274a.517.517 0 0 0 .516-.517v-.93h.93a.517.517 0 0 0 .517-.516v-.93h.93a.517.517 0 1 0 0-1.034h-1.446a.517.517 0 0 0-.517.517v.93h-.93a.517.517 0 0 0-.517.517v.93h-1.24v-1.543l4.582-4.583c.169-.168.2-.43.077-.633a8.363 8.363 0 0 1-.49-.938 1.029 1.029 0 0 1 .217-1.14l2.03-2.02c.289-.288.723-.38 1.105-.234.6.23 1.465.652 2.177 1.36.717.714 1.153 1.591 1.393 2.202.15.381.058.814-.232 1.103l-2.054 2.044a1.04 1.04 0 0 1-1.137.222 6.707 6.707 0 0 1-.93-.475.517.517 0 0 0-.54.881c.339.209.7.393 1.073.548.779.324 1.667.15 2.263-.443l2.054-2.044a2.06 2.06 0 0 0 .465-2.214z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 920px; top: 354px;" data-block-id="90c4939e6cefc3d2518f218fe0e44365">
+    <div class="sl-block-content" data-line-x1="0" data-line-y1="200" data-line-x2="120" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 17;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="0 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="114" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="114" y2="200"></line><polygon fill="#ffffff" transform="translate(114,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 125px; height: 160px; left: 1058px; top: 266px; min-width: 4px; min-height: 4px;" data-block-id="288237b8f85f424b4edd12feb85c50b9">
+    <div class="sl-block-content" style="z-index: 18;">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 600px; left: 340px; top: 0px;" data-block-id="2fc57ff51466362fce87796c052ce915">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;" data-gramm_id="d703a25a-c4f7-b945-f8b7-fc821929469d" data-gramm="true" data-gramm_editor="true">
+        <h2>Asymmetric</h2>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 399px; top: 198px;" data-block-id="641c92bc53930641b6dbbe168c41d7c9">
+    <div class="sl-block-content fragment" data-line-x1="0" data-line-y1="151" data-line-x2="0" data-line-y2="255" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 20;" data-line-width="4px" data-fragment-index="0">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="104" viewbox="0 151 1 104"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="151" x2="0" y2="249"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="151" x2="0" y2="249"></line><polygon fill="#ffffff" transform="translate(0,249) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 399px; top: 199px;" data-block-id="4bd0332a8231ac219f072b283d48a558">
+    <div class="sl-block-content fragment" data-line-x1="38" data-line-y1="168" data-line-x2="520" data-line-y2="168" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="none" style="z-index: 21;" data-line-width="4px" data-fragment-index="0">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="482" height="1" viewbox="38 168 482 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="38" y1="168" x2="520" y2="168"></line><line stroke="#ffffff" stroke-width="4" x1="38" y1="168" x2="520" y2="168"></line></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 881px; top: 199px;" data-block-id="768f5722c278b2c61428b13d8273813c">
+    <div class="sl-block-content fragment" data-line-x1="0" data-line-y1="151" data-line-x2="0" data-line-y2="255" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 22;" data-line-width="4px" data-fragment-index="0">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="104" viewbox="0 151 1 104"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="151" x2="0" y2="249"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="151" x2="0" y2="249"></line><polygon fill="#ffffff" transform="translate(0,249) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="shape" style="width: 231px; height: 44px; left: 525px; top: 177px;" data-block-id="d7620600f7d1db968cb49f6f9ab3afa8">
+    <div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(204, 204, 204)" data-shape-stretch="true" style="z-index: 23;" data-fragment-index="0">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 231 44"><rect width="231" height="44" class="shape-element" fill="rgb(204, 204, 204)"></rect></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 237px; left: 521px; top: 179px;" data-block-id="5ef115380914c8643185b22955b33c6b">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 24; color: rgb(34, 34, 34);" data-gramm_id="c05c55d9-15e7-626b-dc6c-36a27526de95" data-gramm="true" data-gramm_editor="true" data-fragment-index="0" dir="ui">
+        <p>
+            <strong>different keys</strong>
+        </p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" data-block-id="c064cce1651823366fddb7bfec54d02c" style="min-width: 4px; min-height: 4px; width: 125px; height: 160px; left: 579px; top: 287px;">
+    <div class="sl-block-content" style="z-index: 25;" data-inline-svg="false">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/920f788a9d1b95b754844fc0502116d8.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="c3d0bbc29b8410f679a85d5a19d83ed2" style="height: auto; min-width: 30px; min-height: 30px; width: 269px; left: 506px; top: 465px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 26;" data-gramm_id="117fae67-1b61-0032-27ac-96f06f9adf8e" data-gramm="true" data-gramm_editor="true">
+        <p>Ciphertext</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="8ac114f455b5cc5810e5bc93d2cd88d9" style="height: auto; min-width: 30px; min-height: 30px; width: 111px; left: 584px; top: 309px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 27;" data-gramm_id="95e3223b-066a-b28a-1b2b-63517a78e05a" data-gramm="true" data-gramm_editor="true">
+        <p>A@3   </p>
+        <p>CDI)"]'</p>
+        <p>XAS89</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 768px; left: 80px; top: 537px;" data-block-id="a4843ab554bc3cac0030f9b28beb95e3">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<ul>
+	<li>Same key cannot be used to encrypt and decrypt</li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 768px; left: 80px; top: 609px;" data-block-id="10e9493dc1d6bdcf0f93ecbbecd9d535">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 30; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="2">
+<ul>
+	<li>Key are complementary</li>
+</ul>
+</div>
+</div></section></section><section class="stack" data-id="91fe6e51e485cfe5d07a939f37f653f3"><section data-id="d3496ed7eeea5f3c82b58e1406e3c6c2"><div class="sl-block" data-block-type="text" style="width: 920px; left: 180px; top: 0px; height: auto;" data-block-id="9c2e26baab525395557eba0339698eff"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12; font-size: 75%;" data-gramm_id="d7a71078-9cd9-ced5-f5aa-7dfd655fad39" data-gramm="true" data-gramm_editor="true">
+<h1>Public-key Encryption</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 258px; left: 511px; top: 199px;" data-block-id="f98c474007ab5c01c4be9eeea00cfb7c">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<p>Generate key pair</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 255px; top: 195px; min-width: 4px; min-height: 4px;" data-block-id="ca53e7c72bbeeb7da5abd1c4056e825b">
+    <div class="sl-block-content fragment" style="z-index: 14;" data-fragment-index="1">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="shape" data-block-id="34076e08b41046e13fb208a716f666c8" style="min-width: 4px; min-height: 4px; width: 314px; height: 150px; left: 477px; top: 144px;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 11;" data-shape-stroke-color="#ffffff" data-shape-stroke-width="4" data-fragment-index="0"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 314 150"><defs><clippath id="shape-mask-6-1540587151148"><rect width="314" height="150"></rect></clippath></defs><rect width="314" height="150" clip-path="url(#shape-mask-6-1540587151148)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 240px; height: 150px; left: 160px; top: 324px;" data-block-id="1494f11f5e0dbefa7e650e388696d785"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(171, 130, 68)" data-shape-stretch="true" style="z-index: 15;" data-shape-stroke-color="#ab8244" data-shape-stroke-width="4" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 240 150"><defs><clippath id="shape-mask-7-1540587151152"><rect width="240" height="150"></rect></clippath></defs><rect width="240" height="150" clip-path="url(#shape-mask-7-1540587151152)" class="shape-element" fill="rgb(171, 130, 68)" stroke="#ab8244" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="108b5d7db9aeefe6b3682cb11edaa4d1" style="height: auto; min-width: 30px; min-height: 30px; width: 220px; left: 170px; top: 383px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; color: rgb(34, 34, 34);" data-gramm_id="63842cc8-6f06-38fa-fb56-505220650e1b" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<p><strong>Public key</strong></p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 240px; height: 150px; left: 880px; top: 327px;" data-block-id="29ac83feb67bc41987d842bc94ca2d06"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(108, 160, 112)" data-shape-stretch="true" style="z-index: 17;" data-shape-stroke-color="#6ca070" data-shape-stroke-width="4" data-fragment-index="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 240 150"><defs><clippath id="shape-mask-8-1540587151156"><rect width="240" height="150"></rect></clippath></defs><rect width="240" height="150" clip-path="url(#shape-mask-8-1540587151156)" class="shape-element" fill="rgb(108, 160, 112)" stroke="#6ca070" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 220px; left: 890px; top: 386px;" data-block-id="e0f1fab9e51449bb4973f7cd81c0b5f4"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; color: rgb(34, 34, 34);" data-gramm_id="63842cc8-6f06-38fa-fb56-505220650e1b" data-gramm="true" data-gramm_editor="true" data-fragment-index="3">
+<p><strong>Private key</strong></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 975px; top: 195px; min-width: 4px; min-height: 4px;" data-block-id="f4c7e58c51e1cb207acfdb6408772625">
+    <div class="sl-block-content fragment" style="z-index: 19;" data-fragment-index="3" data-inline-svg="true">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50.098" height="50.086" viewbox="0 0 13.255 13.252" preserveaspectratio="xMidYMid meet">
+            <g transform="translate(-70.84 -157.153)" fill="#8dd792" stroke="#fff" stroke-width=".026">
+                <circle r=".827" cy="160.784" cx="80.258"></circle>
+                <path d="M83.94 161.452c-.276-.702-.782-1.716-1.626-2.556-.84-.837-1.844-1.328-2.537-1.593a2.077 2.077 0 0 0-2.204.467l-2.03 2.02a2.068 2.068 0 0 0-.43 2.292c.106.24.222.474.345.7l-4.453 4.454a.517.517 0 0 0-.152.366v2.273c0 .286.232.517.517.517h2.274a.517.517 0 0 0 .516-.517v-.93h.93a.517.517 0 0 0 .517-.516v-.93h.93a.517.517 0 1 0 0-1.034h-1.446a.517.517 0 0 0-.517.517v.93h-.93a.517.517 0 0 0-.517.517v.93h-1.24v-1.543l4.582-4.583c.169-.168.2-.43.077-.633a8.363 8.363 0 0 1-.49-.938 1.029 1.029 0 0 1 .217-1.14l2.03-2.02c.289-.288.723-.38 1.105-.234.6.23 1.465.652 2.177 1.36.717.714 1.153 1.591 1.393 2.202.15.381.058.814-.232 1.103l-2.054 2.044a1.04 1.04 0 0 1-1.137.222 6.707 6.707 0 0 1-.93-.475.517.517 0 0 0-.54.881c.339.209.7.393 1.073.548.779.324 1.667.15 2.263-.443l2.054-2.044a2.06 2.06 0 0 0 .465-2.214z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 315px; top: 218px;" data-block-id="9d884303ff63a05a42d41cd17d8605e2">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="200" data-line-x2="-190" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 20;" data-line-width="4px" data-fragment-index="1">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="150" height="1" viewbox="-190 200 150 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="-184" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="-184" y2="200"></line><polygon fill="#ffffff" transform="translate(-184,200) rotate(270)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 815px; top: 217px;" data-block-id="a339e1fbb384c916bfc8cb4d48e6ac1e">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="200" data-line-x2="-190" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="none" style="z-index: 21;" data-line-width="4px" data-fragment-index="3">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="150" height="1" viewbox="-190 200 150 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-46" y1="200" x2="-190" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-46" y1="200" x2="-190" y2="200"></line><polygon fill="#ffffff" transform="translate(-46,200) rotate(270)" points="0,6 6,-6 -6,-6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 280px; top: 258px;" data-block-id="eb1111b828aaacdb4d96ebba73e0bfb2">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="282" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 22;" data-line-width="4px" data-fragment-index="1">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="53" viewbox="-40 229 1 53"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="276"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="276"></line><polygon fill="#ffffff" transform="translate(-40,276) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 1000px; top: 258px;" data-block-id="a55c85d44228e063c3183e2e747e1202">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="282" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 23;" data-line-width="4px" data-fragment-index="3">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="53" viewbox="-40 229 1 53"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="276"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="276"></line><polygon fill="#ffffff" transform="translate(-40,276) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="9903c39456041889608cc2fb26dffc61" style="height: auto; min-width: 30px; min-height: 30px; width: 179px; left: 190px; top: 569px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 24;" data-fragment-index="2">
+<p>You can share</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" data-block-id="820b05fe68a64a3d7f4b153ab75a7794" style="min-width: 4px; min-height: 4px; width: 239px; height: 102px; left: 161px; top: 557px;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 10;" data-shape-stroke-color="#eeeeee" data-shape-stroke-width="4" data-fragment-index="2"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 239 102"><defs><clippath id="shape-mask-9-1540587151174"><rect width="239" height="102"></rect></clippath></defs><rect width="239" height="102" clip-path="url(#shape-mask-9-1540587151174)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#eeeeee" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 280px; top: 478px;" data-block-id="a74f58fdd7723d132741b4c477514be3">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="295" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 25;" data-line-width="4px" data-fragment-index="2">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="66" viewbox="-40 229 1 66"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="289"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="289"></line><polygon fill="#ffffff" transform="translate(-40,289) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 179px; left: 909px; top: 570px;" data-block-id="59a781c25a07b48121928e28dff561ff"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28;" data-gramm_id="01d8e549-a0f3-1ca9-cf91-18951a64baa4" data-gramm="true" data-gramm_editor="true" data-fragment-index="4">
+<p><strong>MUST </strong>kept</p>
+
+<p>secret</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 239px; height: 102px; left: 880px; top: 558px;" data-block-id="3b48015ce449eb4ec69aa3ac69a14c14"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 27;" data-shape-stroke-color="#eeeeee" data-shape-stroke-width="4" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 239 102"><defs><clippath id="shape-mask-10-1540587151182"><rect width="239" height="102"></rect></clippath></defs><rect width="239" height="102" clip-path="url(#shape-mask-10-1540587151182)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#eeeeee" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 999px; top: 479px;" data-block-id="c169ea8a46803306116b739035c4a70c">
+    <div class="sl-block-content fragment fade-right" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="295" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 29;" data-line-width="4px" data-fragment-index="4">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="66" viewbox="-40 229 1 66"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="289"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="289"></line><polygon fill="#ffffff" transform="translate(-40,289) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div></section><section data-id="e9860d8b4c9b73a7c0cda3f1e9f8a713">
+
+<div class="sl-block" data-block-type="image" style="width: 125px; height: 160px; left: 98px; top: 224px; min-width: 4px; min-height: 4px;" data-block-id="8f8ea9b30be960d5881c032c5111556f">
+    <div class="sl-block-content" style="z-index: 10;">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 240px; top: 304px;" data-block-id="094bdb7e5c4c5e16b8592681f9fa5a70">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 11;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="-40 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 376px; top: 279px; min-width: 4px; min-height: 4px;" data-block-id="926d57d21d558c6d6edd3a2ba6c510a8">
+    <div class="sl-block-content" style="z-index: 12;">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 440px; top: 304px;" data-block-id="890e35e4d238d1924cc8a91104517b3c">
+    <div class="sl-block-content" data-line-x1="0" data-line-y1="200" data-line-x2="120" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 13;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="0 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="114" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="114" y2="200"></line><polygon fill="#ffffff" transform="translate(114,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 720px; top: 304px;" data-block-id="aa31e876dd889120decbf4e4fda700ce">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="80" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 14;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="-40 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="74" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="74" y2="200"></line><polygon fill="#ffffff" transform="translate(74,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 856px; top: 279px; min-width: 4px; min-height: 4px;" data-block-id="bbd1a60ea96791fecc91a2fbf2f630cd">
+    <div class="sl-block-content" style="z-index: 15;" data-inline-svg="true">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50.098" height="50.086" viewbox="0 0 13.255 13.252" preserveaspectratio="xMidYMid meet">
+            <g transform="translate(-70.84 -157.153)" fill="#8dd792" stroke="#fff" stroke-width=".026">
+                <circle r=".827" cy="160.784" cx="80.258"></circle>
+                <path d="M83.94 161.452c-.276-.702-.782-1.716-1.626-2.556-.84-.837-1.844-1.328-2.537-1.593a2.077 2.077 0 0 0-2.204.467l-2.03 2.02a2.068 2.068 0 0 0-.43 2.292c.106.24.222.474.345.7l-4.453 4.454a.517.517 0 0 0-.152.366v2.273c0 .286.232.517.517.517h2.274a.517.517 0 0 0 .516-.517v-.93h.93a.517.517 0 0 0 .517-.516v-.93h.93a.517.517 0 1 0 0-1.034h-1.446a.517.517 0 0 0-.517.517v.93h-.93a.517.517 0 0 0-.517.517v.93h-1.24v-1.543l4.582-4.583c.169-.168.2-.43.077-.633a8.363 8.363 0 0 1-.49-.938 1.029 1.029 0 0 1 .217-1.14l2.03-2.02c.289-.288.723-.38 1.105-.234.6.23 1.465.652 2.177 1.36.717.714 1.153 1.591 1.393 2.202.15.381.058.814-.232 1.103l-2.054 2.044a1.04 1.04 0 0 1-1.137.222 6.707 6.707 0 0 1-.93-.475.517.517 0 0 0-.54.881c.339.209.7.393 1.073.548.779.324 1.667.15 2.263-.443l2.054-2.044a2.06 2.06 0 0 0 .465-2.214z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 920px; top: 304px;" data-block-id="846ae7b791ea8d46df0ceb43e52f4d35">
+    <div class="sl-block-content" data-line-x1="0" data-line-y1="200" data-line-x2="120" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 16;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="120" height="1" viewbox="0 200 120 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="0" y1="200" x2="114" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="0" y1="200" x2="114" y2="200"></line><polygon fill="#ffffff" transform="translate(114,200) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 125px; height: 160px; left: 1058px; top: 216px; min-width: 4px; min-height: 4px;" data-block-id="4a032ef802b377e011f1d6d81ec45c5c">
+    <div class="sl-block-content" style="z-index: 17;">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/17b904feec5a7a24e453dc359a9d4940.svg">
+    </div>
+</div>
+
+
+
+
+
+
+<div class="sl-block" data-block-type="image" style="width: 125px; height: 160px; left: 579px; top: 237px; min-width: 4px; min-height: 4px;" data-block-id="df2ef0b6025f9cecf0c035b1ca4fcce0">
+    <div class="sl-block-content" style="z-index: 18;" data-inline-svg="false">
+        <img style="" data-natural-width="125" data-natural-height="160" data-lazy-loaded="" data-src="demystify-ssh/920f788a9d1b95b754844fc0502116d8.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 269px; left: 506px; top: 415px;" data-block-id="3766eb34e5d9eb02c2c5aa57f1b825af">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;" data-gramm_id="117fae67-1b61-0032-27ac-96f06f9adf8e" data-gramm="true" data-gramm_editor="true">
+        <p>Ciphertext</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 111px; left: 584px; top: 259px;" data-block-id="3b4130b70719b7c05eb7c2104d5255ef">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;" data-gramm_id="95e3223b-066a-b28a-1b2b-63517a78e05a" data-gramm="true" data-gramm_editor="true">
+        <p>A@3   </p>
+        <p>CDI)"]'</p>
+        <p>XAS89</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="f4421c48e746b1718811a8f8571f1741" style="height: auto; min-width: 30px; min-height: 30px; width: 230px; left: 766px; top: 372px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; color: rgb(108, 160, 112);">
+<p>Private key</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 230px; left: 285px; top: 365px;" data-block-id="c555da0fc34a5107b352693942603605"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 22; color: rgb(171, 130, 68);" data-gramm_id="a39d76b4-8e53-d79c-da30-2b8cbc1e7886" data-gramm="true" data-gramm_editor="true">
+<p>Public key</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 920px; left: 180px; top: 0px; height: auto;" data-block-id="a8196a0d407d38fcf7c5d4e2c7834581"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 23; font-size: 75%;" data-gramm_id="d7a71078-9cd9-ced5-f5aa-7dfd655fad39" data-gramm="true" data-gramm_editor="true">
+<h1>Public-key Encryption</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 472px; left: 80px; top: 537px;" data-block-id="7d02f7e2dfcdf8d8d9431ffec9c8d072">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 24; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="0">Used by SSH, SSL (HTTPS), etc</li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 1120px; left: 80px; top: 609px;" data-block-id="dfd69ff9e0285fcabe876bad3324756f">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 26; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="1">Popular asymmetric key algorithm are: RSA, DSA, etc</li>
+</ul>
+</div>
+</div></section></section><section data-id="c269c86e1c9342b64c2d1a5ca5c502e8"><div class="sl-block" data-block-type="text" style="width: 1123px; left: 79px; top: 0px; height: auto;" data-block-id="31de56ef3d0dbc4836703642afedfa24">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11; font-size: 75%;">
+        <h1>How Does SSH Work?</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="5fe5ecf3fbdbf9527f04c4eca1c7763e" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 393px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;">
+        <ul>
+            <li class="fragment" data-fragment-index="0">
+                <span style="text-align:start">Both parties negotiate a session key using public key encryption</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 79px; top: 465px;" data-block-id="fc8be11e26ff4dedc0b6c09908fec797">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="89a752b4-a39d-8a53-170b-4a2ca111081c" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="1">
+                <span>Agree on an encryption generator, for example AES</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 83px; top: 537px;" data-block-id="32778dd5756d41f908078dd56a34607e">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="89a752b4-a39d-8a53-170b-4a2ca111081c" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="2">
+                <span>Agree on symmetric secret key</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 609px;" data-block-id="a780e3849017eacdbfe3ab98cb2d9b13">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: left;" data-gramm_id="89a752b4-a39d-8a53-170b-4a2ca111081c" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="3">SSH re-keying when max minutes/data has been reached</li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" data-block-id="de1ce723f6ad723e3a9f90811b936268" style="min-width: 4px; min-height: 4px; width: 160px; height: 160px; left: 278px; top: 136px;">
+    <div class="sl-block-content" style="z-index: 16;" data-inline-svg="true">
+        <img style="" data-natural-width="467" data-natural-height="467" data-lazy-loaded="" data-src="demystify-ssh/f0726273edf2e4cc46dfcd90b07b1413.svg">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewbox="0 0 467.211 467.211" enable-background="new 0 0 467.211 467.211" width="467.211" height="467.211" preserveaspectratio="xMidYMid meet">
+            <g fill="#fff">
+                <path d="m413.917,96.775h-360.622c-6.369,0-11.551,5.181-11.551,11.55v213.182c0,6.369 5.182,11.55 11.551,11.55h360.622c6.368,0 11.55-5.181 11.55-11.55v-213.181c-5.68434e-14-6.369-5.182-11.551-11.55-11.551zm1.55,224.732c0,0.855-0.695,1.55-1.55,1.55h-360.622c-0.855,0-1.551-0.696-1.551-1.55v-213.181c0-0.855 0.695-1.55 1.551-1.55h360.622c0.854,0 1.55,0.696 1.55,1.55v213.181z"></path>
+                <path d="m459.711,340.558h-11.744v-237.715c0-15.752-12.815-28.568-28.568-28.568h-371.586c-15.753,0-28.568,12.815-28.568,28.568v237.714h-11.745c-4.143,0-7.5,3.358-7.5,7.5v20.605c0,13.384 10.889,24.272 24.272,24.272h418.666c13.384,0 24.272-10.889 24.272-24.272v-20.605c0.001-4.141-3.356-7.499-7.499-7.499zm-425.467-237.715c-2.84217e-14-7.481 6.087-13.568 13.568-13.568h371.586c7.481,0 13.568,6.086 13.568,13.568v237.714h-398.722v-237.714zm177.361,252.715h44v3.922c0,1.755-1.428,3.184-3.184,3.184h-37.633c-1.756,0-3.184-1.428-3.184-3.184v-3.922zm240.607,13.105c0,5.113-4.159,9.272-9.272,9.272h-418.667c-5.113,0-9.272-4.16-9.272-9.272v-13.105h11.744 174.861v3.922c0,7.27 5.914,13.184 13.184,13.184h37.633c7.27,0 13.184-5.914 13.184-13.184v-3.922h174.861 11.744v13.105z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" data-block-id="cb01c68f1bcdbd18aa345b10218db492" style="min-width: 4px; min-height: 4px; width: 108px; height: 108px; left: 895px; top: 162px;">
+    <div class="sl-block-content" style="z-index: 17;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" data-block-id="ee9f5b0d3f2809eee6589418268e1d48" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 469px; top: 216px;"><div class="sl-block-content" data-line-x1="-17" data-line-y1="200" data-line-x2="383" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="line-arrow" style="z-index: 18;" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="400" height="1" viewbox="-17 200 400 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-17" y1="200" x2="380" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-17" y1="200" x2="380" y2="200"></line><path style="fill: rgba(0,0,0,0);" stroke="#ffffff" stroke-width="4" transform="translate(380,200) rotate(90)" d="M 9 9 L 0 0 L -9 9"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="df0cb17c4b8cfab5eb01f098f6bcb949" style="height: auto; min-width: 30px; min-height: 30px; width: 240px; left: 549px; top: 162px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19;">
+<p>ssh</p>
+</div></div></section><section data-id="458d2638d0f03298522fa85af259438c"><div class="sl-block" data-block-type="image" data-block-id="2d90b7216950912e26714ba5a2ddae57" style="min-width: 4px; min-height: 4px; width: 617px; height: 718px; left: 332px; top: 2px;"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="347" data-natural-height="404" data-lazy-loaded="" data-src="demystify-ssh/37867fbcdd99c6e3bf1e7bbbae81ea86.gif"></div></div></section><section class="stack" data-id="67acaf1d73c1abc6b142a394aeef6b06"><section data-id="6132fbb4a550dc85d062bc57a65534c4"><div class="sl-block" data-block-type="text" style="width: 1120px; left: 80px; top: 0px; height: auto;" data-block-id="a5ab0ffe81d1549935af0e2f9c956627">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12; font-size: 75%;" data-gramm_id="d1b2e928-a368-be3c-16c1-7e60b530dfbf" data-gramm="true" data-gramm_editor="true">
+<h1>Generate private &amp; public key</h1>
+</div>
+</div>
+<div class="sl-block" data-block-type="code" data-block-id="77c7af09d5e02ee58051356b14a006f4" style="min-width: 30px; min-height: 30px; width: 762px; height: 52px; left: 258px; top: 144px;">
+    <div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 13; font-size: 140%;" data-fragment-index="0">
+        <pre class="bash"><code style="padding: 10px;">ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</code></pre>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="46d70eaa581e3fdbae1a6106183c6700" style="height: auto; min-width: 30px; min-height: 30px; width: 70px; left: 451px; top: 151px;">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 80%;" data-gramm_id="08b6ea3b-934f-c9cf-7e88-ed99ac60212c" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+        <p>
+            <strong strong="" style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">rsa</strong>
+        </p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 70px; left: 553px; top: 151px;" data-block-id="c6e69ca594d15095c2626a1cc4ce4a9d">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 80%;" data-gramm_id="08b6ea3b-934f-c9cf-7e88-ed99ac60212c" data-gramm="true" data-gramm_editor="true" data-fragment-index="3">
+        <p>
+            <strong strong="" style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">4096</strong>
+        </p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" data-block-id="09496ffa48c6c8be48eee72dc4f44239" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 479px; top: 182px;"><div class="sl-block-content fragment fade-down" data-line-x1="-60" data-line-y1="100" data-line-x2="-60" data-line-y2="6" data-line-color="#ff9900" data-line-start-type="none" data-line-end-type="none" style="z-index: 16;" data-line-width="4px" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="94" viewbox="-60 6 1 94"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-60" y1="100" x2="-60" y2="6"></line><line stroke="#ff9900" stroke-width="4" x1="-60" y1="100" x2="-60" y2="6"></line></svg></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="27a7fae65565fc55eb33a4c434f68e06" style="height: auto; min-width: 30px; min-height: 30px; width: 411px; left: 114px; top: 311px;"><div class="sl-block-content fragment fade-down" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; border-style: solid; border-width: 2px; padding: 10px;" data-gramm_id="82956d2a-e1ac-cca2-6908-b8905e2d4a5e" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<p><span>Specifies the type of key to create.</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" data-block-id="34159ecfe56cc2fc9815c2f9dec90845" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 319px; top: 276px;"><div class="sl-block-content fragment fade-down" data-line-x1="40" data-line-y1="0" data-line-x2="200" data-line-y2="0" data-line-color="#ff9900" data-line-start-type="none" data-line-end-type="none" style="z-index: 18;" data-line-width="4px" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="160" height="1" viewbox="40 0 160 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="40" y1="0" x2="200" y2="0"></line><line stroke="#ff9900" stroke-width="4" x1="40" y1="0" x2="200" y2="0"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 318px; top: 276px;" data-block-id="4c5f5df710e780b8674c12a6f3ccffed"><div class="sl-block-content fragment fade-down" data-line-x1="-60" data-line-y1="63" data-line-x2="-60" data-line-y2="28" data-line-color="#ff9900" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 19;" data-line-width="4px" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="35" viewbox="-60 28 1 35"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-60" y1="60" x2="-60" y2="28"></line><line stroke="#ff9900" stroke-width="4" x1="-60" y1="60" x2="-60" y2="28"></line><path style="fill: rgba(0,0,0,0);" stroke="#ff9900" stroke-width="4" transform="translate(-60,60) rotate(0)" d="M -9 -9 L 0 0 L 9 -9"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 411px; left: 755px; top: 311px;" data-block-id="8f5e913b87bcad320052deec1818d967"><div class="sl-block-content fragment fade-down" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; border-style: solid; border-width: 2px; padding: 10px;" data-gramm_id="82956d2a-e1ac-cca2-6908-b8905e2d4a5e" data-gramm="true" data-gramm_editor="true" data-fragment-index="3">
+<p><span>Specifies the number of bits in the key to create</span></p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 587px; top: 182px;" data-block-id="04eb09d1fd58159af67e29ac63e4833e"><div class="sl-block-content fragment fade-down" data-line-x1="-60" data-line-y1="100" data-line-x2="-60" data-line-y2="6" data-line-color="#ff9900" data-line-start-type="none" data-line-end-type="none" style="z-index: 21;" data-line-width="4px" data-fragment-index="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="94" viewbox="-60 6 1 94"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-60" y1="100" x2="-60" y2="6"></line><line stroke="#ff9900" stroke-width="4" x1="-60" y1="100" x2="-60" y2="6"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 587px; top: 275px;" data-block-id="2ef941bde48c315b76db3f0e7e906a51"><div class="sl-block-content fragment fade-down" data-line-x1="40" data-line-y1="0" data-line-x2="413" data-line-y2="0" data-line-color="#ff9900" data-line-start-type="none" data-line-end-type="none" style="z-index: 22;" data-line-width="4px" data-fragment-index="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="373" height="1" viewbox="40 0 373 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="40" y1="0" x2="413" y2="0"></line><line stroke="#ff9900" stroke-width="4" x1="40" y1="0" x2="413" y2="0"></line></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 960px; top: 275px;" data-block-id="97a903173709bb13dc75273cceac6458"><div class="sl-block-content fragment fade-down" data-line-x1="-59" data-line-y1="64" data-line-x2="-60" data-line-y2="28" data-line-color="#ff9900" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 23;" data-line-width="4px" data-fragment-index="3"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="36" viewbox="-60 28 1 36"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-59" y1="61" x2="-60" y2="28"></line><line stroke="#ff9900" stroke-width="4" x1="-59" y1="61" x2="-60" y2="28"></line><path style="fill: rgba(0,0,0,0);" stroke="#ff9900" stroke-width="4" transform="translate(-59,61) rotate(-1.591)" d="M -9 -9 L 0 0 L 9 -9"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 411px; left: 114px; top: 488px;" data-block-id="a941295f59d4dd6bfe9e5cbaab58cd64"><div class="sl-block-content fragment fade-down" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 24; border-style: solid; border-width: 2px; padding: 10px;" data-gramm_id="82956d2a-e1ac-cca2-6908-b8905e2d4a5e" data-gramm="true" data-gramm_editor="true" data-fragment-index="2">
+<p>dsa,ecdsa,ed25519</p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 319px; top: 413px;" data-block-id="71424f6154368b9c057087d59588f342"><div class="sl-block-content fragment fade-down" data-line-x1="-60" data-line-y1="103" data-line-x2="-60" data-line-y2="28" data-line-color="#ff9900" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 25;" data-line-width="4px" data-fragment-index="2"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="75" viewbox="-60 28 1 75"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-60" y1="100" x2="-60" y2="28"></line><line stroke="#ff9900" stroke-width="4" x1="-60" y1="100" x2="-60" y2="28"></line><path style="fill: rgba(0,0,0,0);" stroke="#ff9900" stroke-width="4" transform="translate(-60,100) rotate(0)" d="M -9 -9 L 0 0 L 9 -9"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 411px; left: 755px; top: 474px;" data-block-id="a4c642a49f0716c4da5bbf7ef7777147"><div class="sl-block-content fragment fade-down" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 26; border-style: solid; border-width: 2px; padding: 10px;" data-gramm_id="82956d2a-e1ac-cca2-6908-b8905e2d4a5e" data-gramm="true" data-gramm_editor="true" data-fragment-index="4">
+<p>also depends by the type of key</p>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 960px; top: 413px;" data-block-id="d8dacc0dcdb582d9cabb74f01bc952aa"><div class="sl-block-content fragment fade-down" data-line-x1="-59" data-line-y1="86" data-line-x2="-60" data-line-y2="28" data-line-color="#ff9900" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 27;" data-line-width="4px" data-fragment-index="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="58" viewbox="-60 28 1 58"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-59" y1="83" x2="-60" y2="28"></line><line stroke="#ff9900" stroke-width="4" x1="-59" y1="83" x2="-60" y2="28"></line><path style="fill: rgba(0,0,0,0);" stroke="#ff9900" stroke-width="4" transform="translate(-59,83) rotate(-0.988)" d="M -9 -9 L 0 0 L 9 -9"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 746px; left: 78px; top: 654px;" data-block-id="6eab025b2c025681df4a305fce74b865"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28; text-align: left;" data-gramm_id="f61c2d7d-a878-3d91-4362-c31e40b08714" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="6" style="font-size:0.7em">a different algorithm might be not supported yet by the client or server</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1040px; left: 80px; top: 609px;" data-block-id="8f877525b8c84569be7c7d4dcf927685"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: left;" data-gramm_id="4a0185af-343e-2c07-365d-1a6324b34985" data-gramm="true" data-gramm_editor="true" dir="ui" data-has-custom-html=""><ul><li class="fragment" data-fragment-index="5" style="font-size:0.7em">RSA is still considered strong, but the recommended key length has increased over time</li></ul></div></div></section><section data-id="0c622085037a0a6a467035063631e830"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="4423f41d1dc392083f7f4be8a1956ab6"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 75%;">
+<h1>Why 4096?</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 249px;" data-block-id="47f5284ce5fe36f1cb766df5873e4d03"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="355c35bf-e1fb-18e1-4386-cd80a3da8908" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="1">RSA-576 (576 bits) was factored in <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">2003</strong>
+</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 321px;" data-block-id="4c5802f3d2789732f0869f309ddf154c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="355c35bf-e1fb-18e1-4386-cd80a3da8908" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="2">RSA-768 (768 bits) was factored in <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">2009</strong>
+</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 393px;" data-block-id="fe01de5b8f6a50c75d747e86c38c523a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="355c35bf-e1fb-18e1-4386-cd80a3da8908" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="3">RSA-1024 (1024 bits) has not been factored so far.</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 177px;" data-block-id="303727760c6bf1b9b168d792497fde79"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: left;" data-gramm_id="355c35bf-e1fb-18e1-4386-cd80a3da8908" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="0">Some version using lower binary digits have been factored</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 465px;" data-block-id="b0a7e4b6a2af6b50272cad3e0bc8b6f9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: left;" data-gramm_id="355c35bf-e1fb-18e1-4386-cd80a3da8908" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="4">RSA-2048 may not be factorisable for many years to come</li>
+</ul>
+</div></div></section><section data-id="f49b14912da88ffa6c1c10341063fcd2"><div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 1047px; height: 576px; left: 110px; top: 107px;" data-block-id="262e25334538cdbbfcd013ddf1e51102"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="480" data-natural-height="264" data-lazy-loaded="" data-src="demystify-ssh/698bd0326df16454b40ba135b974f89c.gif"></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 33px;" data-block-id="8fc30b77570934c9ca9abd3257f22e21"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;">
+<ul>
+	<li class="visible">A key size of at least 2048 bits is recommended for RSA; 4096 bits is better</li>
+</ul>
+</div></div></section><section data-id="b399f540583d6b367c42135e1cb38e80"><div class="sl-block" data-block-type="text" style="width: 1178px; left: 51px; top: 0px; height: auto;" data-block-id="4108ecc99e58b2315a9a88bf1c4fa024"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 75%;" data-gramm_id="155be08e-81a2-e735-1ca6-10f6f2e49c7b" data-gramm="true" data-gramm_editor="true">
+<h1>Generate private &amp; public key</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 570px; height: 54px; left: 355px; top: 297px;" data-block-id="079d201146777f4e035934bc7ba6fa6b"><div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 11;" data-fragment-index="0"><pre class="bash"><code>Generating public/private rsa key pair.
+Enter file in which to save the key (~/.ssh/id_rsa): 
+</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 142px; height: auto;" data-block-id="2b316d808fcd548177caeeda11d49f0a"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 12;" data-gramm_id="5b1d6892-46fe-ba7a-9011-99b776964a78" data-gramm="true" data-gramm_editor="true">
+<h2>Path &amp; Filename</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1167px; left: 80px; top: 465px;" data-block-id="3123f7d8468fa5cc0a2191377b4884ca"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="" data-fragment-index="1">
+<p>Custom file name can be used for:</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1167px; left: 80px; top: 609px;" data-block-id="0ad71e45da0e2552710e606b94672ac4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="3">different services</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1167px; left: 80px; top: 537px;" data-block-id="4404160d3081d5c43f85769e62cbc07e"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="2">keep personal and company keys separated</li>
+</ul>
+</div></div></section><section data-id="3f0fe93f35e8122ed7caab7049738b49">
+<div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 142px; height: auto;" data-block-id="edb3e17da89fccd17691a11eeb413687"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 11;" data-gramm_id="eed5c8cc-f0ab-51ba-594e-5feb40a5f446" data-gramm="true" data-gramm_editor="true">
+<h2>Protecting SSH keys</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 1178px; left: 51px; top: 0px; height: auto;" data-block-id="40330c07bbb00a948e35d884a54d919f"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 12; font-size: 75%;" data-gramm_id="155be08e-81a2-e735-1ca6-10f6f2e49c7b" data-gramm="true" data-gramm_editor="true">
+<h1>Generate private &amp; public key</h1>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 570px; height: 35px; left: 355px; top: 325px;" data-block-id="510874900ff35c493e554e5c1b6f442e"><div class="sl-block-content notranslate" data-highlight-theme="github-gist" style="z-index: 13;"><pre class="bash"><code>Enter passphrase (empty for no passphrase):</code></pre></div></div>
+</section><section data-id="91d00dae50cdb757c53f9ecaacb17b2d">
+<div class="sl-block" data-block-type="text" style="width: 1178px; left: 51px; top: 0px; height: auto;" data-block-id="3c0803d60334edfb73f8838573b35e8c"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11; font-size: 75%;" data-gramm_id="155be08e-81a2-e735-1ca6-10f6f2e49c7b" data-gramm="true" data-gramm_editor="true">
+<h1>Generate private &amp; public key</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 258px; left: 511px; top: 199px;" data-block-id="821fbb4e4bea1c2164c3af072a5e4e19">
+    <div class="sl-block-style" style="z-index: 14; opacity: 0.7;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="58803913-2f4b-f3c1-7b50-679a83dd42ca" data-gramm="true" data-gramm_editor="true">
+<p>Generate key pair</p>
+</div></div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 255px; top: 195px; min-width: 4px; min-height: 4px;" data-block-id="34701fabe767346eafd9aaf1fa788b5d">
+    <div class="sl-block-style" style="z-index: 15; opacity: 0.7;"><div class="sl-block-content" style="z-index: 15;">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+    </div></div>
+</div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 314px; height: 150px; left: 477px; top: 144px;" data-block-id="deccf7aa4b19ab89f061c1b9f24617cc"><div class="sl-block-style" style="z-index: 13; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 13;" data-shape-stroke-color="#ffffff" data-shape-stroke-width="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 314 150"><defs><clippath id="shape-mask-6-1538773732397"><rect width="314" height="150"></rect></clippath></defs><rect width="314" height="150" clip-path="url(#shape-mask-6-1538773732397)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="8"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 240px; height: 150px; left: 160px; top: 324px;" data-block-id="68be84a06622356d83363c3c1bc7af1b"><div class="sl-block-style" style="z-index: 16; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(204, 204, 204)" data-shape-stretch="true" style="z-index: 16;" data-shape-stroke-color="#ab8244" data-shape-stroke-width="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 240 150"><defs><clippath id="shape-mask-7-1538773732401"><rect width="240" height="150"></rect></clippath></defs><rect width="240" height="150" clip-path="url(#shape-mask-7-1538773732401)" class="shape-element" fill="rgb(204, 204, 204)" stroke="#ab8244" stroke-width="8"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 220px; left: 170px; top: 383px;" data-block-id="1169e96a929ed964ff94d1c98e438f21"><div class="sl-block-style" style="z-index: 17; opacity: 0.7;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; color: rgb(34, 34, 34);" data-gramm_id="63842cc8-6f06-38fa-fb56-505220650e1b" data-gramm="true" data-gramm_editor="true">
+<p><strong>Public key</strong></p>
+</div></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 240px; height: 150px; left: 880px; top: 327px;" data-block-id="346774ef92c3c5a119e47c43d11343a1"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(108, 160, 112)" data-shape-stretch="true" style="z-index: 18;" data-shape-stroke-color="#6ca070" data-shape-stroke-width="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 240 150"><defs><clippath id="shape-mask-8-1538773732407"><rect width="240" height="150"></rect></clippath></defs><rect width="240" height="150" clip-path="url(#shape-mask-8-1538773732407)" class="shape-element" fill="rgb(108, 160, 112)" stroke="#6ca070" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 220px; left: 890px; top: 386px;" data-block-id="bf2ec5e9680cf3c5d6f699ba9013d8ce"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; color: rgb(34, 34, 34);" data-gramm_id="63842cc8-6f06-38fa-fb56-505220650e1b" data-gramm="true" data-gramm_editor="true">
+<p><strong>Private key</strong></p>
+</div></div>
+<div class="sl-block" data-block-type="image" style="width: 50px; height: 50px; left: 975px; top: 195px; min-width: 4px; min-height: 4px;" data-block-id="883a334a699c199707d77f72e38f54e3">
+    <div class="sl-block-content" style="z-index: 20;" data-inline-svg="true">
+        <img style="" data-natural-width="50" data-natural-height="50" data-lazy-loaded="" data-src="demystify-ssh/301289b17155f03aa6a477d26dd64c7c.svg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50.098" height="50.086" viewbox="0 0 13.255 13.252" preserveaspectratio="xMidYMid meet">
+            <g transform="translate(-70.84 -157.153)" fill="#8dd792" stroke="#fff" stroke-width=".026">
+                <circle r=".827" cy="160.784" cx="80.258"></circle>
+                <path d="M83.94 161.452c-.276-.702-.782-1.716-1.626-2.556-.84-.837-1.844-1.328-2.537-1.593a2.077 2.077 0 0 0-2.204.467l-2.03 2.02a2.068 2.068 0 0 0-.43 2.292c.106.24.222.474.345.7l-4.453 4.454a.517.517 0 0 0-.152.366v2.273c0 .286.232.517.517.517h2.274a.517.517 0 0 0 .516-.517v-.93h.93a.517.517 0 0 0 .517-.516v-.93h.93a.517.517 0 1 0 0-1.034h-1.446a.517.517 0 0 0-.517.517v.93h-.93a.517.517 0 0 0-.517.517v.93h-1.24v-1.543l4.582-4.583c.169-.168.2-.43.077-.633a8.363 8.363 0 0 1-.49-.938 1.029 1.029 0 0 1 .217-1.14l2.03-2.02c.289-.288.723-.38 1.105-.234.6.23 1.465.652 2.177 1.36.717.714 1.153 1.591 1.393 2.202.15.381.058.814-.232 1.103l-2.054 2.044a1.04 1.04 0 0 1-1.137.222 6.707 6.707 0 0 1-.93-.475.517.517 0 0 0-.54.881c.339.209.7.393 1.073.548.779.324 1.667.15 2.263-.443l2.054-2.044a2.06 2.06 0 0 0 .465-2.214z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 315px; top: 218px;" data-block-id="423d30ad8a0474e024b8dbfe0aceb55b">
+    <div class="sl-block-style" style="z-index: 21; opacity: 0.7;"><div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="-190" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 21;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="150" height="1" viewbox="-190 200 150 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="200" x2="-184" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="200" x2="-184" y2="200"></line><polygon fill="#ffffff" transform="translate(-184,200) rotate(270)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div></div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 815px; top: 217px;" data-block-id="0893f23a8d80c62381b6a5031b83863a">
+    <div class="sl-block-style" style="z-index: 22; opacity: 0.7;"><div class="sl-block-content" data-line-x1="-40" data-line-y1="200" data-line-x2="-190" data-line-y2="200" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="none" style="z-index: 22;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="150" height="1" viewbox="-190 200 150 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-46" y1="200" x2="-190" y2="200"></line><line stroke="#ffffff" stroke-width="4" x1="-46" y1="200" x2="-190" y2="200"></line><polygon fill="#ffffff" transform="translate(-46,200) rotate(270)" points="0,6 6,-6 -6,-6"></polygon></svg>
+    </div></div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 280px; top: 258px;" data-block-id="3608972e95deb97d6680fe2bfb150ca8">
+    <div class="sl-block-style" style="z-index: 23; opacity: 0.7;"><div class="sl-block-content" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="282" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 23;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="53" viewbox="-40 229 1 53"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="276"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="276"></line><polygon fill="#ffffff" transform="translate(-40,276) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div></div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 1000px; top: 258px;" data-block-id="7efc6f0955729c48778e5b065fa70804">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="282" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 24;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="53" viewbox="-40 229 1 53"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="276"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="276"></line><polygon fill="#ffffff" transform="translate(-40,276) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 179px; left: 190px; top: 569px;" data-block-id="f038f1e7d406b10520a03f492f194151"><div class="sl-block-style" style="z-index: 25; opacity: 0.7;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 25;">
+<p>You can share</p>
+</div></div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 239px; height: 102px; left: 161px; top: 557px;" data-block-id="79593b659448c97040b58a01a987ba8d"><div class="sl-block-style" style="z-index: 12; opacity: 0.7;"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#eeeeee" data-shape-stroke-width="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 239 102"><defs><clippath id="shape-mask-9-1538773732435"><rect width="239" height="102"></rect></clippath></defs><rect width="239" height="102" clip-path="url(#shape-mask-9-1538773732435)" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#eeeeee" stroke-width="8"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 280px; top: 478px;" data-block-id="1668520479d8577ec435f82d7953a8a6">
+    <div class="sl-block-style" style="z-index: 26; opacity: 0.7;"><div class="sl-block-content" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="295" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 26;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="66" viewbox="-40 229 1 66"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="289"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="289"></line><polygon fill="#ffffff" transform="translate(-40,289) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div></div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 179px; left: 909px; top: 567px;" data-block-id="d55a63c39fbfc0ce07e364bb39144348"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 28;" data-gramm_id="01d8e549-a0f3-1ca9-cf91-18951a64baa4" data-gramm="true" data-gramm_editor="true">
+<p><strong>MUST </strong>kept</p>
+
+<p>secret</p>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 239px; height: 102px; left: 880px; top: 558px;" data-block-id="7ddee6243aa3da570b016074387e23c9"><div class="sl-block-content" data-shape-type="rect" data-shape-fill-color="rgb(255, 65, 54)" data-shape-stretch="true" style="z-index: 27;" data-shape-stroke-color="#eeeeee" data-shape-stroke-width="4"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 239 102"><defs><clippath id="shape-mask-10-1538773732442"><rect width="239" height="102"></rect></clippath></defs><rect width="239" height="102" clip-path="url(#shape-mask-10-1538773732442)" class="shape-element" fill="rgb(255, 65, 54)" stroke="#eeeeee" stroke-width="8"></rect></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 999px; top: 479px;" data-block-id="d8e5376f6778b21de583f37e13199e81">
+    <div class="sl-block-content" data-line-x1="-40" data-line-y1="229" data-line-x2="-40" data-line-y2="295" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 29;" data-line-width="4px">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="66" viewbox="-40 229 1 66"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-40" y1="229" x2="-40" y2="289"></line><line stroke="#ffffff" stroke-width="4" x1="-40" y1="229" x2="-40" y2="289"></line><polygon fill="#ffffff" transform="translate(-40,289) rotate(180)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div></section><section data-id="928124537a825b43929cf3d48f0d845e">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 142px; height: auto;" data-block-id="0e189ce3771986ffac080169a072a1ea"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Subtitle" style="z-index: 10;">
+<h2>Passphrase</h2>
+</div></div>
+<div class="sl-block" data-block-type="text" style="width: 1178px; left: 51px; top: 0px; height: auto;" data-block-id="852e52c5e1e7d07c6e6edb1b44be2b86"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 11; font-size: 75%;" data-gramm_id="155be08e-81a2-e735-1ca6-10f6f2e49c7b" data-gramm="true" data-gramm_editor="true">
+<h1>Generate private &amp; public key</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1163px; left: 80px; top: 288px;" data-block-id="235ec78d0963c5bbec7cc57e71b62d93"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="">The passphrase is used to <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">encrypt the private key</strong> using 128-bit AES</li>
+</ul>
+</div></div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 1156px; left: 80px; top: 360px;" data-block-id="58d5fb8625702638785686001891b1a9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="0"><span class="st">If someone is <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">able to read</strong> your private key, they are <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">"unable" to use</strong> it.</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 1156px; left: 80px; top: 432px;" data-block-id="2184f0170e470d4abe4cbf4e61d6dbbd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="1"><span class="st">Is recommended to reduce risk of keys accidentally leaking from, e.g., backups or decommissioned disk drives</span></li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 1156px; left: 80px; top: 537px;" data-block-id="d68a9d4c01f3ff22065cc4e4d419605c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="">
+<ul>
+	<li class="fragment" data-fragment-index="2">If you lost/forgot the passphrase you have to<span class="st"> generate a new key pair</span>
+</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 1156px; left: 80px; top: 609px;" data-block-id="26c4853b3aac2099db28ce13ce849cd4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: left;" data-gramm_id="9ace1ad2-206f-c54b-dca0-a3d046d62271" data-gramm="true" data-gramm_editor="true" data-has-custom-html="" dir="ui">
+<ul>
+	<li class="fragment" data-fragment-index="3">The passphrase can be changed<span class="short_text" id="result_box" lang="en"><span> subsequently</span></span>
+</li>
+</ul>
+</div></div></section></section><section data-id="946e1a2136e51550a3c9b6f53d6f3f3d"><div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 1048px; height: 720px; left: 115px; top: 0px;" data-block-id="e8a1172183643c0e32d4dd18834b9826"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="291" data-natural-height="200" data-lazy-loaded="" data-src="demystify-ssh/f2f0d79c845a0fcbe05ed8ec3fc1a525.gif"></div></div></section><section class="stack" data-id="d820c0c22aa57d5dab8df88b2adc5c38"><section data-id="dbfbf7f8f5ae2c98e7ae4865c0874192"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="5bd496fe57ec72ae12f8fcff3adf3712">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;" data-gramm_id="85eb23de-d0c4-1a6c-d347-c9cc3e52c422" data-gramm="true" data-gramm_editor="true">
+        <h1>SSH Agent</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 803px; left: 240px; top: 122px;" data-block-id="bd689b1e48c17f957d63823d44720a98">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="b8b50b9c-b4b5-593b-9502-3cf5c2ae6804" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+        <p style="text-align:left">
+            <em>
+                <strong>"ssh-agent</strong> is a program to 
+                
+                
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">hold private keys</strong> used for public key authentication."
+            
+            
+            </em>
+        </p>
+        <p style="text-align:left"> </p>
+        <p style="text-align:left">
+            <span>
+                <em>-- </em>
+            </span>Linux man page
+        
+        
+        </p>
+        <p> </p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 354px;" data-block-id="66918501d1daf6f106de39f3075ceae8">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="1">SSH agent handles the private keys by storing them 
+                
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">in memory</strong>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 426px;" data-block-id="5fef89cec224bdd804cd0e73159d89cf">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="2">The keys are 
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">never shared</strong> with client programs
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 498px;" data-block-id="9d7689ddea95f8ff3d5be92b096b7cc3">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="3">Operations that require a private key will be 
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">performed by the agent</strong>, and the result will be returned to the requester
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 681px;" data-block-id="36674797c558b7e37087769bd644e854">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="5">SSH agent allows using multiple keys easily</li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 609px;" data-block-id="93052ed224ee7807dee3254f66ed907d">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="4">Communication with other process happens 
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">via socket</strong>
+            </li>
+        </ul>
+    </div>
+</div></section><section data-id="947bef084b273187e04e913dac5e9e1e"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="546951ecf4daec8575a9fdc524423301"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 72%;" data-gramm_id="85eb23de-d0c4-1a6c-d347-c9cc3e52c422" data-gramm="true" data-gramm_editor="true">
+<h1>SSH Agent</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 681px; left: 260px; top: 177px;" data-block-id="9ac4bf7fde679d0d23032ecd831d6b9d"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" data-gramm_id="db8c8210-a441-3a5d-d50b-d85f2876dabe" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<p>Start the ssh-agent in the background</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 762px; height: 52px; left: 260px; top: 236px;" data-block-id="0603374550b8a071ff49731e4d796fb1">
+    <div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 13; font-size: 140%;" data-fragment-index="0">
+        <pre class="bash"><code style="padding: 10px;">eval "$(ssh-agent -s)"</code></pre>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 681px; left: 260px; top: 393px;" data-block-id="5c5df23a55d27757539658592877bd70"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: left;" data-gramm_id="db8c8210-a441-3a5d-d50b-d85f2876dabe" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<p>Add your SSH private key to the agent:</p>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 762px; height: 52px; left: 259px; top: 452px;" data-block-id="f90f692719be1e59aee5ff0107941b81">
+    <div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 16; font-size: 140%;" data-fragment-index="1">
+        <pre class="bash"><code style="padding: 10px;">ssh-add ~/.ssh/id_rsa</code></pre>
+    </div>
+</div></section></section><section class="stack" data-id="172dd028b4ffb76a316f4203a0385501"><section data-id="b46930b2cc4bebddece223334cde99c5"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="60a41013de65b7b15c4f7eda08f199c2"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 70%;" data-gramm_id="8b3713d1-6183-9427-6be3-32d515008da4" data-gramm="true" data-gramm_editor="true">
+<h1>SSH Usage</h1>
+</div></div>
+
+
+
+
+
+
+<div class="sl-block" data-block-type="code" data-block-id="db4be38033b5189d8ceb334f958d396d" style="min-width: 30px; min-height: 30px; width: 490px; height: 47px; left: 315px; top: 241px;"><div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 11; font-size: 130%;" data-fragment-index="0"><pre class="bash"><code>ssh [username]@[domain/ip address]</code></pre></div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 490px; height: 47px; left: 320px; top: 457px;" data-block-id="e1fd6d12e19aa995445e6803025182fb"><div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 12; font-size: 130%;" data-fragment-index="1"><pre class="bash"><code>asenese@93digital:~$ </code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-block-id="0f6c3422c1a6e8ef884060a46491b1da" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 265px; top: 393px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="da1f757b-ac42-40c6-d099-db9755fb60b7" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<p>Terminal:</p>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 240px; top: 177px;" data-block-id="7519cb61423fb8f2618c4b83dfc2cd34"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: left;" data-gramm_id="da1f757b-ac42-40c6-d099-db9755fb60b7" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<p>To connect:</p>
+</div></div></section><section data-id="67df8042fc5bc4ba14bc08a787ac324a"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="567992d696888fe50d3eec23772fcbf2"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 70%;" data-gramm_id="8b3713d1-6183-9427-6be3-32d515008da4" data-gramm="true" data-gramm_editor="true">
+<h1>What we can do with SSH?</h1>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 177px;" data-block-id="4784f77f2f20b47ab8905226c33747f5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="0">Install applications on the server remotely</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 393px;" data-block-id="ca8eb81b2cb16c575b2976ec9fdf5724"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="3">
+<ul>
+	<li>Take backups</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 249px;" data-block-id="dc8ef2c98498eb7d7ea45f56775570fd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="1">Configure the server remotely</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 321px;" data-block-id="24203d04d753c1cbf720be3beef1d5cd"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li class="fragment" data-fragment-index="2">Manage files and folders easily</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 537px;" data-block-id="8f7f701e1841c76d689b9f23b7f4758e"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="5">
+<ul>
+	<li>Automate deploying of local code</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 609px;" data-block-id="7455be0889cc48c1242055e319af7459"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="6">
+<ul>
+	<li>and lot more...</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 880px; left: 80px; top: 465px;" data-block-id="ba0a438b0887569fd96ef718912731f8"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="4">
+<ul>
+	<li>Access to the remote datatabase via command line</li>
+</ul>
+</div></div></section></section><section data-id="59d6ac495590db794b667f6bd5821b8f">
+
+
+<div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="ebd318bdd0cd16cfd261438016b64dad">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 70%;" data-gramm_id="8b3713d1-6183-9427-6be3-32d515008da4" data-gramm="true" data-gramm_editor="true" dir="ui">
+        <h1>Tools</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 880px; left: 80px; top: 249px;" data-block-id="43fd296234ee0d48eede50554009dc5c">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="0">
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">rsync</strong> - a fast, versatile, remote (and local) file-copying tool
+            
+            
+            
+            
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 880px; left: 80px; top: 321px;" data-block-id="655e8716ff0ce1e4add91cfda4a8226e">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="1">
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">scp</strong> - secure copy
+            
+            
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1200px; left: 80px; top: 393px;" data-block-id="c745255b0a8b81317648b72a43097d63">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+        <ul>
+            <li class="fragment" data-fragment-index="2">
+                <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">wordmove</strong> - lets you automatically mirror local WordPress installations to the remote server. ”
+            </li>
+        </ul>
+    </div>
+</div></section><section class="stack" data-id="cadd7b62887ae7fe42ae82ff5c24a329"><section data-id="5f465cf1bae0693d52e51d44be1b9844">
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 108px; height: 108px; left: 177px; top: 212px;" data-block-id="75359addac53031af414d0002bc728ec">
+    <div class="sl-block-content" style="z-index: 12;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 108px; height: 108px; left: 977px; top: 212px;" data-block-id="d291872608260283c1fb84abfa34860f">
+    <div class="sl-block-content" style="z-index: 13;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 311px; top: 266px;" data-block-id="8b96b675a70d185ffd8061a7e1960621">
+    <div class="sl-block-content fragment" data-line-x1="-300" data-line-y1="109" data-line-x2="340" data-line-y2="109" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="arrow" style="z-index: 14;" data-line-width="4px" data-fragment-index="0">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="640" height="1" viewbox="-300 109 640 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-294" y1="109" x2="334" y2="109"></line><line stroke="#ffffff" stroke-width="4" x1="-294" y1="109" x2="334" y2="109"></line><polygon fill="#ffffff" transform="translate(-294,109) rotate(90)" points="0,6 6,-6 -6,-6"></polygon><polygon fill="#ffffff" transform="translate(334,109) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 169px; left: 142px; top: 167px;" data-block-id="c1e1ff52011f95ad2f7be7020fc2608d">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server A</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 169px; left: 951px; top: 163px;" data-block-id="2a89c6c8fc0720bd56a0df5d88221044">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server B</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 160px; height: 160px; left: 560px; top: 517px;" data-block-id="7e2636fcf19038a7e23ce98d4f54de88">
+    <div class="sl-block-content" style="z-index: 17;" data-inline-svg="true">
+        <img style="" data-natural-width="467" data-natural-height="467" data-lazy-loaded="" data-src="demystify-ssh/f0726273edf2e4cc46dfcd90b07b1413.svg">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 467.211 467.211" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 467.211 467.211" width="467.211" height="467.211" preserveaspectratio="xMidYMid meet">
+            <g fill="#fff">
+                <path d="m413.917,96.775h-360.622c-6.369,0-11.551,5.181-11.551,11.55v213.182c0,6.369 5.182,11.55 11.551,11.55h360.622c6.368,0 11.55-5.181 11.55-11.55v-213.181c-5.68434e-14-6.369-5.182-11.551-11.55-11.551zm1.55,224.732c0,0.855-0.695,1.55-1.55,1.55h-360.622c-0.855,0-1.551-0.696-1.551-1.55v-213.181c0-0.855 0.695-1.55 1.551-1.55h360.622c0.854,0 1.55,0.696 1.55,1.55v213.181z"></path>
+                <path d="m459.711,340.558h-11.744v-237.715c0-15.752-12.815-28.568-28.568-28.568h-371.586c-15.753,0-28.568,12.815-28.568,28.568v237.714h-11.745c-4.143,0-7.5,3.358-7.5,7.5v20.605c0,13.384 10.889,24.272 24.272,24.272h418.666c13.384,0 24.272-10.889 24.272-24.272v-20.605c0.001-4.141-3.356-7.499-7.499-7.499zm-425.467-237.715c-2.84217e-14-7.481 6.087-13.568 13.568-13.568h371.586c7.481,0 13.568,6.086 13.568,13.568v237.714h-398.722v-237.714zm177.361,252.715h44v3.922c0,1.755-1.428,3.184-3.184,3.184h-37.633c-1.756,0-3.184-1.428-3.184-3.184v-3.922zm240.607,13.105c0,5.113-4.159,9.272-9.272,9.272h-418.667c-5.113,0-9.272-4.16-9.272-9.272v-13.105h11.744 174.861v3.922c0,7.27 5.914,13.184 13.184,13.184h37.633c7.27,0 13.184-5.914 13.184-13.184v-3.922h174.861 11.744v13.105z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 240px; top: 360px;" data-block-id="aa02b26b51a4d29a55642895041d3d92"><div class="sl-block-content fragment" data-line-x1="120" data-line-y1="182" data-line-x2="-164" data-line-y2="-18" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="arrow" style="z-index: 18;" data-fragment-index="1" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="284" height="200" viewbox="-164 -18 284 200"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="115" y1="179" x2="-159" y2="-15"></line><line stroke="#ffffff" stroke-width="4" x1="115" y1="179" x2="-159" y2="-15"></line><polygon fill="#ffffff" transform="translate(115,179) rotate(-54.846)" points="0,6 6,-6 -6,-6"></polygon><polygon fill="#ffffff" transform="translate(-159,-15) rotate(-54.846)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 756px; top: 364px;" data-block-id="e3160c922009199935b095f5923888de"><div class="sl-block-content fragment" data-line-x1="102" data-line-y1="172" data-line-x2="386" data-line-y2="-20" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="arrow" style="z-index: 19;" data-fragment-index="2" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="284" height="192" viewbox="102 -20 284 192"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="107" y1="169" x2="381" y2="-17"></line><line stroke="#ffffff" stroke-width="4" x1="107" y1="169" x2="381" y2="-17"></line><polygon fill="#ffffff" transform="translate(107,169) rotate(55.939)" points="0,6 6,-6 -6,-6"></polygon><polygon fill="#ffffff" transform="translate(381,-17) rotate(55.939)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 41px; height: 41px; left: 620px; top: 247px;" data-block-id="afdbd2a63ccc1f049a06f1b726f1ab8c"><div class="sl-block-content fragment" style="z-index: 20;" data-fragment-index="0"><img style="" data-natural-width="470" data-natural-height="470" data-lazy-loaded="" data-src="demystify-ssh/59c2557e3a663269072dfa2658da7ca9.svg"></div></div></section><section data-id="69383c87716130d5d134cbe95143cde1">
+<div class="sl-block" data-block-type="image" style="width: 108px; height: 108px; left: 177px; top: 212px; min-width: 4px; min-height: 4px;" data-block-id="66a4ba2e63f515ef594bdb54c3f2788d">
+    <div class="sl-block-content" style="z-index: 12;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="width: 108px; height: 108px; left: 977px; top: 212px; min-width: 4px; min-height: 4px;" data-block-id="a9e252bed2c5338e6a65596e31d7173b">
+    <div class="sl-block-content" style="z-index: 13;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 169px; left: 142px; top: 167px;" data-block-id="a1f4126562a3f7750f7095961e972c46">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server A</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 169px; left: 951px; top: 163px;" data-block-id="e2ce7b82adc5416e65537e662aa87ef5">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server B</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 81px; top: 393px;" data-block-id="bcf2a8aa3af9b586236493b7621c9db6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li>Create a key pair on Server A</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 311px; top: 266px;" data-block-id="839e95a37f878d86c794a0e4bb779b84">
+    <div class="sl-block-content fragment" data-line-x1="-300" data-line-y1="109" data-line-x2="340" data-line-y2="109" data-line-color="#ffffff" data-line-start-type="arrow" data-line-end-type="arrow" style="z-index: 17;" data-line-width="4px" data-fragment-index="2">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="640" height="1" viewbox="-300 109 640 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-294" y1="109" x2="334" y2="109"></line><line stroke="#ffffff" stroke-width="4" x1="-294" y1="109" x2="334" y2="109"></line><polygon fill="#ffffff" transform="translate(-294,109) rotate(90)" points="0,6 6,-6 -6,-6"></polygon><polygon fill="#ffffff" transform="translate(334,109) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 465px;" data-block-id="02c6dff886639dd2f462c91a4eaae1e7"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<ul>
+	<li>Copy the public key from Server A to Server B</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 1120px; left: 80px; top: 537px;" data-block-id="1f6551945b36032ff319a94db7977dab"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="1">
+<ul>
+	<li>Repeat the above steps for Server B</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 48px; height: 48px; left: 616px; top: 198px;" data-block-id="d7772bb259fbacff86aedc6874f0bc82"><div class="sl-block-content fragment" data-shape-type="symbol-checkmark-circle" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 20;" data-fragment-index="2"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(106, 168, 79)"><path d="M16 0c-8.836 0-16 7.164-16 16s7.164 16 16 16 16-7.164 16-16-7.164-16-16-16zM13.52 23.383l-7.362-7.363 2.828-2.828 4.533 4.535 9.617-9.617 2.828 2.828-12.444 12.445z"></path></g></svg></div></div></section><section data-id="f9698fe0740b83f5922d0b696c445b64"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="a5f58e5a0f3fadba610b639adcdeda5e">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 72%;" data-gramm_id="7b4abb4d-9969-2f01-f114-6ecd4df421dc" data-gramm="true" data-gramm_editor="true">
+        <h1>SSH Agent Forwarding</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 803px; left: 239px; top: 210px;" data-block-id="4e6ce13dba0a2091111fae5c2fe90e39">
+    <div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; text-align: left;" data-gramm_id="b8b50b9c-b4b5-593b-9502-3cf5c2ae6804" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+        <p style="text-align:left">
+            <em>
+                <span>“</span>SSH agent forwarding can be used to make deploying to a server simple. <strong style="background:#bcbcbc; color: #222;padding-left: 5px;padding-right:5px;display:inline-block">It allows you to use your local SSH keys</strong> instead of leaving keys (without passphrases!) sitting on your server."
+            </em>
+            <span></span>
+        </p>
+        <p style="text-align:left"> </p>
+        <p style="text-align:left">
+            <span>
+                <em>-- Github</em>
+            </span>
+        </p>
+        <p> </p>
+    </div>
+</div></section><section data-id="9fc994020d4269df2d2e1e3cd5905b4a"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="a8c2feca310abe0f5e8a09f3a4c87c2c">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 72%;" data-gramm_id="7b4abb4d-9969-2f01-f114-6ecd4df421dc" data-gramm="true" data-gramm_editor="true">
+        <h1>SSH Agent Forwarding</h1>
+    </div>
+</div>
+
+
+
+
+
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 108px; height: 108px; left: 177px; top: 212px;" data-block-id="b477395bd4427356b571a5aff60ccdc5">
+    <div class="sl-block-content" style="z-index: 11;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 108px; height: 108px; left: 977px; top: 212px;" data-block-id="6ec685474ff1ff67477c36da71edaa53">
+    <div class="sl-block-content" style="z-index: 12;" data-inline-svg="false">
+        <img style="" data-natural-width="58" data-natural-height="58" data-lazy-loaded="" data-src="demystify-ssh/68fc85de14bbf4f7d0bb3205962a2b7b.svg">
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 311px; top: 266px;" data-block-id="b25aee51c208727775711cb0aa35b68d">
+    <div class="sl-block-content fragment" data-line-x1="-300" data-line-y1="109" data-line-x2="340" data-line-y2="109" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 13;" data-line-width="4px" data-fragment-index="1">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="640" height="1" viewbox="-300 109 640 1"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="-300" y1="109" x2="334" y2="109"></line><line stroke="#ffffff" stroke-width="4" x1="-300" y1="109" x2="334" y2="109"></line><polygon fill="#ffffff" transform="translate(334,109) rotate(90)" points="0,-6 6,6 -6,6"></polygon></svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 169px; left: 142px; top: 167px;" data-block-id="2b913d98204c9c512d23c416a5ebaa55">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server A</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 169px; left: 951px; top: 163px;" data-block-id="0f6461b13cb4e144b80768baf0cfe05a">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true">
+        <p>Server B</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 160px; height: 160px; left: 560px; top: 517px;" data-block-id="ca1f7fce1add0f4158885a98e8a91773">
+    <div class="sl-block-content" style="z-index: 16;" data-inline-svg="true">
+        <img style="" data-natural-width="467" data-natural-height="467" data-lazy-loaded="" data-src="demystify-ssh/f0726273edf2e4cc46dfcd90b07b1413.svg">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 467.211 467.211" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 467.211 467.211" width="467.211" height="467.211" preserveaspectratio="xMidYMid meet">
+            <g fill="#fff">
+                <path d="m413.917,96.775h-360.622c-6.369,0-11.551,5.181-11.551,11.55v213.182c0,6.369 5.182,11.55 11.551,11.55h360.622c6.368,0 11.55-5.181 11.55-11.55v-213.181c-5.68434e-14-6.369-5.182-11.551-11.55-11.551zm1.55,224.732c0,0.855-0.695,1.55-1.55,1.55h-360.622c-0.855,0-1.551-0.696-1.551-1.55v-213.181c0-0.855 0.695-1.55 1.551-1.55h360.622c0.854,0 1.55,0.696 1.55,1.55v213.181z"></path>
+                <path d="m459.711,340.558h-11.744v-237.715c0-15.752-12.815-28.568-28.568-28.568h-371.586c-15.753,0-28.568,12.815-28.568,28.568v237.714h-11.745c-4.143,0-7.5,3.358-7.5,7.5v20.605c0,13.384 10.889,24.272 24.272,24.272h418.666c13.384,0 24.272-10.889 24.272-24.272v-20.605c0.001-4.141-3.356-7.499-7.499-7.499zm-425.467-237.715c-2.84217e-14-7.481 6.087-13.568 13.568-13.568h371.586c7.481,0 13.568,6.086 13.568,13.568v237.714h-398.722v-237.714zm177.361,252.715h44v3.922c0,1.755-1.428,3.184-3.184,3.184h-37.633c-1.756,0-3.184-1.428-3.184-3.184v-3.922zm240.607,13.105c0,5.113-4.159,9.272-9.272,9.272h-418.667c-5.113,0-9.272-4.16-9.272-9.272v-13.105h11.744 174.861v3.922c0,7.27 5.914,13.184 13.184,13.184h37.633c7.27,0 13.184-5.914 13.184-13.184v-3.922h174.861 11.744v13.105z"></path>
+            </g>
+        </svg>
+    </div>
+</div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 1px; min-height: 1px; left: 240px; top: 360px;" data-block-id="cecebed89c0ee81777d7d4423de4a555"><div class="sl-block-content fragment" data-line-x1="120" data-line-y1="182" data-line-x2="-164" data-line-y2="-18" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="arrow" style="z-index: 17;" data-fragment-index="0" data-line-width="4px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="284" height="200" viewbox="-164 -18 284 200"><line stroke="rgba(0,0,0,0)" stroke-width="15" x1="120" y1="182" x2="-159" y2="-15"></line><line stroke="#ffffff" stroke-width="4" x1="120" y1="182" x2="-159" y2="-15"></line><polygon fill="#ffffff" transform="translate(-159,-15) rotate(-54.846)" points="0,-6 6,6 -6,6"></polygon></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 169px; left: 313px; top: 434px;" data-block-id="2af5e11a63ee04300b93020efd568681">
+    <div class="sl-block-style" style="z-index: 18; transform: rotate(35deg);"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18; font-size: 80%;" data-gramm_id="18e3d206-e9b5-ea64-21f1-f2a1715d5bb8" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<p>ssh-agent</p>
+
+<p>forward</p>
+</div></div>
+</div>
+<div class="sl-block" data-block-type="shape" style="min-width: 4px; min-height: 4px; width: 48px; height: 48px; left: 616px; top: 198px;" data-block-id="c5bfebcb57db06bdebdc56e7f89b4c4a"><div class="sl-block-content fragment" data-shape-type="symbol-checkmark-circle" data-shape-fill-color="rgb(106, 168, 79)" data-shape-stretch="true" style="z-index: 20;" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 32 32"><g class="shape-element" fill="rgb(106, 168, 79)"><path d="M16 0c-8.836 0-16 7.164-16 16s7.164 16 16 16 16-7.164 16-16-7.164-16-16-16zM13.52 23.383l-7.362-7.363 2.828-2.828 4.533 4.535 9.617-9.617 2.828 2.828-12.444 12.445z"></path></g></svg></div></div></section><section data-id="72c064b9d48ca6883369d83cb5fd7000"><div class="sl-block" data-block-type="text" style="width: 1075px; left: 103px; top: 0px; height: auto;" data-block-id="1b0a18ec6b83e22e0dc989cd3b6e5994">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 72%;" data-gramm_id="7b4abb4d-9969-2f01-f114-6ecd4df421dc" data-gramm="true" data-gramm_editor="true">
+        <h1>SSH Agent Forwarding</h1>
+    </div>
+</div>
+
+
+
+
+
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 326px; height: 32px; left: 160px; top: 256px;" data-block-id="dbd34d5ffff345175921694f456b7aaf"><div class="sl-block-content notranslate" data-highlight-theme="github-gist" style="z-index: 11; font-size: 130%;"><pre class="bash"><code>ssh -a [...]</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 479px; left: 80px; top: 177px;" data-block-id="f4eeea1319255cdf954d567e393bf674"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li>Method 1</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="code" style="min-width: 30px; min-height: 30px; width: 326px; height: 62px; left: 160px; top: 514px;" data-block-id="0aca6762cc1fccea8fb129e34d4accc7"><div class="sl-block-content notranslate fragment" data-highlight-theme="github-gist" style="z-index: 13; font-size: 130%;" data-fragment-index="0"><pre class="bash"><code>Host [host address]
+    ForwardAgent yes</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 479px; left: 80px; top: 393px;" data-block-id="d81338392d3bd54463ebf07467b30795"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<ul>
+	<li>Method 2</li>
+</ul>
+</div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 878px; left: 162px; top: 465px;" data-block-id="6f5e89a33f24dac69a794c41607609da"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; text-align: left;" data-gramm_id="d3e14bcd-3e2d-710f-9f1b-1292e1c52225" data-gramm="true" data-gramm_editor="true" data-fragment-index="0">
+<ul>
+	<li>Add to your ssh config file (~/.ssh/config):</li>
+</ul>
+</div></div></section><section data-id="ac509504db714a893c7a49908d3ad990"><div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 886px; height: 720px; left: 197px; top: 0px;" data-block-id="c8d8e8262cc4ad89c50cceb1bffad8d3"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="480" data-natural-height="390" data-lazy-loaded="" data-src="demystify-ssh/f9de57a9e63eef8b8068f52bfb43ff22.gif"></div></div></section></section><section data-id="9858b0bb0e2eb0b70bbd773c9cf6f5d6"><div class="sl-block" data-block-type="image" style="min-width: 4px; min-height: 4px; width: 1280px; height: 686px; left: 0px; top: 17px;" data-block-id="e0a9f7c37c275a3bde33d331a9399045"><div class="sl-block-content" style="z-index: 11;"><img style="" data-natural-width="700" data-natural-height="375" data-lazy-loaded="" data-src="demystify-ssh/f94c7a2abadf2c4b2543421db16fb3b9.gif"></div></div></section><section data-id="1d31b267baf609243a7450dc3d00c3a5"><div class="sl-block" data-block-type="text" style="width: 806px; left: 277px; top: 0px; height: auto;" data-block-id="ad99f42d903070bb57d7c08c42dfe7a4">
+    <div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10; font-size: 75%;" data-gramm_id="4bf739ec-ff50-0445-0496-b30e54ab2dbb" data-gramm="true" data-gramm_editor="true">
+        <h1>Resources</h1>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="58f8f3e303593aae579abc2a0373ae14" style="height: auto; min-width: 30px; min-height: 30px; width: 752px; left: 80px; top: 144px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" data-gramm_id="a09e18ab-799d-70c6-fca6-f5f7bc809223" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li><a href="https://www.youtube.com/watch?v=M7kEpw1tn50" target="_blank">https://www.youtube.com/watch?v=M7kEpw1tn50</a></li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" data-block-id="61834cacc10509f4912fa87e708c9369" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 105px;">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;" data-gramm_id="fce4ae48-f8d7-eb01-6872-d35ded352cbe" data-gramm="true" data-gramm_editor="true">
+        <p style="text-align: left;">Encryption and HUGE numbers</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 432px;" data-block-id="3c56328d0ad981d3c3ddb1c0e07b0600">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;" data-gramm_id="fce4ae48-f8d7-eb01-6872-d35ded352cbe" data-gramm="true" data-gramm_editor="true">
+        <p style="text-align:left">SSH by Michael W. Lucas</p>
+    </div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 720px; left: 80px; top: 471px;" data-block-id="8b40b0ea9edb3b0d4e132f9491163bfa">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;" data-gramm_id="cdb7531b-f32f-cc55-e903-28199dad7169" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li><a href="https://www.youtube.com/watch?v=fnkG9_jy2qc" target="_blank">https://www.youtube.com/watch?v=fnkG9_jy2qc</a></li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 712px; left: 80px; top: 255px;" data-block-id="0814883da4021b20211d32deb7211db8">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;" data-gramm_id="a09e18ab-799d-70c6-fca6-f5f7bc809223" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li><a href="https://www.youtube.com/watch?v=4zahvcJ9glg" target="_blank">https://www.youtube.com/watch?v=4zahvcJ9glg</a></li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 216px;" data-block-id="ce2a4226336876fcb0f5f6072a306b2f">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 17;" data-gramm_id="fce4ae48-f8d7-eb01-6872-d35ded352cbe" data-gramm="true" data-gramm_editor="true">
+<p style="text-align:left">RSA algorithm</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 537px;" data-block-id="bec78e9694aa3af99d2686b84e382eed">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 18;" data-gramm_id="fce4ae48-f8d7-eb01-6872-d35ded352cbe" data-gramm="true" data-gramm_editor="true">
+<p style="text-align: left;">WordMove</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 576px;" data-block-id="7ac35e02a8b2ac0a1161240ec1f561b6">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; border-width: 1px;" data-gramm_id="4e29220a-bbd8-131e-8918-4a0d36cfb31c" data-gramm="true" data-gramm_editor="true">
+<ul>
+	<li><a href="https://github.com/welaika/wordmove" target="_blank">https://github.com/welaika/wordmove</a></li>
+</ul>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 600px; left: 80px; top: 321px;" data-block-id="5b4cffce8a41734cff290cdb8d32c67e">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;" data-gramm_id="fce4ae48-f8d7-eb01-6872-d35ded352cbe" data-gramm="true" data-gramm_editor="true">
+<p style="text-align:left">How RSA works with example</p>
+</div>
+</div>
+<div class="sl-block" data-block-type="text" style="height: auto; min-width: 30px; min-height: 30px; width: 873px; left: 80px; top: 360px;" data-block-id="32a18a9994abab3b3d3d0b1845af9152">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; text-align: left;" data-gramm_id="a09e18ab-799d-70c6-fca6-f5f7bc809223" data-gramm="true" data-gramm_editor="true" dir="ui">
+<ul>
+	<li><a href="http://doctrina.org/How-RSA-Works-With-Examples.html" target="_blank">http://doctrina.org/How-RSA-Works-With-Examples.html</a></li>
+</ul>
+</div>
+</div></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":1262471,"slug":"demystify-ssh","title":"Demystify SSH","description":"A simplified overview of how it works and how to set it up, how we can benefit from using SSH and some WordPress tool that use it.","width":1280,"height":720,"visibility":"self","published_at":"2018-05-24T21:51:34.232Z","sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/4b10f4994a21435dbd5b6856558239aa/thumb.jpg?1537306375","view_count":0,"user":{"id":886158,"username":"ceceppa","name":"Alessandro Senese","description":"","thumbnail_url":"https://www.gravatar.com/avatar/4470e249d002b3cf5257df62660d861e?s=140\u0026d=https%3A%2F%2Fstatic.slid.es%2Fimages%2Fdefault-profile-picture.png","paid":true,"pro":false,"lite":true,"team_id":null,"settings":{"id":1349541,"present_controls":false,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null}},"background_transition":"slide","transition":"slide","theme_id":null,"theme_font":"montserrat","theme_color":"black-orange","auto_slide_interval":0,"comments_enabled":true,"forking_enabled":true,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":false,"slide_count":41,"rtl":false,"version":2,"collaborative":true,"deck_user_editor_limit":1,"data_updated_at":1540587158444,"font_typekit":null,"font_google":null,"notes":{"e9860d8b4c9b73a7c0cda3f1e9f8a713":"Complete this"}}};
+
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/head.min.js"></script>
+		<script src="lib/reveal.min.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 1280,
+				height: 720,
+				margin: 0.05,
+
+				controls: true,
+				progress: true,
+				history: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: false,
+
+				autoSlide: 0 || 0,
+				autoSlideStoppable: true,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+
+				transition: "slide",
+				backgroundTransition: "slide",
+
+				dependencies: [
+					{ src: 'lib/reveal-plugins/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/reveal-plugins/highlight/highlight.js', async: true, callback: function() { hljs.initHighlighting(); hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/reveal-plugins/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'lib/reveal-plugins/zoom/zoom.js', async: true }
+				]
+			});
+		</script>
+
+		
+
+	</body>
+</html>
